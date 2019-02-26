@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.kimschool.member.dao.MemberMapper">
+
+	<!-- 회원정보 저장 : 직원은 권한1, 학생은 권한2, Guest는 권한3 부여 -->
+	<insert id="insertMemberInfo" parameterType="member">
+		INSERT
+		INTO MEMBER(member_id, password, full_Name, nickname, email, phone)
+		VALUES(#{memberId}, #{password}, #{fullName}, #{name}, #{email}, #{phone})
+	</insert>
+	
+	<!-- ID로 회원정보검색 -->
+	<select id="searchMemberById" parameterType="String" resultType="member">
+		SELECT
+		 *			
+		FROM MEMBER
+		WHERE 
+			member_id = #{memberId}
+	</select>
+	
+	<!-- 회원닉네임으로 해당 회원정보 검색 -->
+	<select id="searchMemberByName" parameterType="String" resultType="member">
+		SELECT
+			*
+		FROM MEMBER
+		WHERE 
+			nickname = #{name}
+	</select>
+	
+	<!-- 회원으로 해당 회원정보 검색 -->
+	<select id="searchMemberByMail" parameterType="String" resultType="member">
+		SELECT
+			*
+		FROM MEMBER
+		WHERE 
+			email = #{email}
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateMemberInfo" parameterType="member">
+		UPDATE
+			MEMBER
+		SET 
+			password = #{password},
+			nickname = #{name},
+			email = #{email},
+			phone = #{phone}
+		WHERE 
+			member_id = #{memberId}
+	</update>
+	
+	<!-- 회원정보 삭제  -->
+	<update id="delMemberInfo" parameterType="member">
+		UPDATE
+			MEMBER
+		SET 
+		    del_flg ='1'
+		WHERE 
+			member_id = #{memberId}
+            AND password = #{password}
+	</update>
+	
+	<!-- 회원 물리 삭제  -->
+	<delete id="delMemberData" parameterType="member">
+	   DELETE
+		FROM MEMBER
+	  WHERE
+		member_id = #{memberId}			
+	</delete>
+
+</mapper>

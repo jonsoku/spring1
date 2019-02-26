@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.kimschool.board.dao.NoticeMapper">
+
+	<!-- 게시글 추가 입력  -->
+	<insert id="noticeBoardInsert" parameterType="noticeBoard">
+		INSERT
+		INTO NOTICE_BOARD(board_num, member_id, title, content, postorder, depth)
+		VALUES(notice_board_seq.nextval, #{memberId}, #{title}, #{content}, #{postOrder}, #{depth})
+	</insert>
+	
+	<!-- 조회수 증감반영 후, 수정 -->
+	<update id="boardCount" parameterType="int">
+		UPDATE
+			NOTICE_BOARD
+		SET 
+			board_count = board_count + 1
+		WHERE 
+			board_num = #{boardNum}
+	</update>
+	
+	<!-- 검색한 게시글 수 취득 -->
+	<select id="noticeBoardTotal" parameterType="String" resultType="int">
+		SELECT
+			count(*)
+		FROM NOTICE_BOARD
+		<if test="_parameter != null">
+		WHERE title like '%' || #{searchText} || '%'
+		</if>
+	</select>
+			
+	<!-- 검색한 게시글 Entity 취득 -->
+	<select id="noticeBoardInfoList" parameterType="String" resultType="noticeBoard">
+		SELECT
+		    board_num,
+			member_id,
+			title,
+			content,
+			to_char(regDate, 'YYYY-MM-DD HH24:MI:SS')regDate,
+		    board_count,
+			postorder,
+			depth,
+		    del_flg
+		FROM NOTICE_BOARD
+		<if test="_parameter != null">
+		WHERE title like '%' || #{searchText} || '%'
+		</if>
+		ORDER BY 
+			postorder	
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="noticeBoardUpdate" parameterType="noticeBoard">
+		UPDATE
+			NOTICE_BOARD
+		SET 
+			title = #{title},
+			content = #{content}
+		WHERE 
+			board_num = #{boardNum}
+			AND member_id = #{memberId}
+	</update>
+	
+	<!-- 공지게시판 Entity 취득 -->
+	<select id="selectNoticeBoardList" resultType="noticeBoard">
+		SELECT
+		    board_num,
+			member_id,
+			title,
+			content,
+			to_char(regDate, 'YYYY-MM-DD HH24:MI:SS')regDate,
+		    board_count,
+			postorder,
+			depth,
+		    del_flg
+		FROM NOTICE_BOARD
+		ORDER BY 
+			postorder	
+	</select>
+	
+	<!-- 게시글 삭제  -->
+	<update id="noticeBoardDel" parameterType="noticeBoard">
+	UPDATE
+	  NOTICE_BOARD
+	SET
+	  del_flg ='1'
+	 WHERE
+	  board_num =#{boardNum}
+	</update>
+	
+	<!-- 글 순서정렬 번호로 연관된 게시글삭제 -->	
+	<delete id="delPostOrder" parameterType="int">
+		DELETE FROM NOTICE_BOARD WHERE postorder = #{postOrder}
+	</delete>
+	
+	<!-- 게시물등록(insert)후, 게시글 재정렬(글 순서정렬 번호) -->
+	<update id="renewPostOrderBoard">
+		UPDATE NOTICE_BOARD SET postorder = postorder + 1
+	</update>
+	
+	<!-- 한개 단위의 게시글 정보취득 -->
+	<select id="oneNoticeBoardInfo" parameterType="int" resultType="noticeBoard">
+		SELECT
+		    board_num,
+			member_id,
+			title,
+			content,
+			to_char(regDate, 'YYYY-MM-DD HH24:MI:SS')regDate,
+		    board_count,
+			postorder,
+			depth,
+		    del_flg
+		FROM NOTICE_BOARD
+		WHERE
+			board_num = #{boardNum}
+	</select>
+	
+	<!-- postorder값을 통해 게시글취득 -->
+	<select id="searchPosNoticeBoard" parameterType="int" resultType="noticeBoard">
+		SELECT
+            board_num,
+			member_id,
+			title,
+			content,
+			to_char(regDate, 'YYYY-MM-DD HH24:MI:SS')regDate,
+		    board_count,
+			postorder,
+			depth,
+		    del_flg
+		FROM NOTICE_BOARD
+		WHERE
+			postorder = #{postOrder}
+	</select>
+	
+	<!-- 댓글 추가 입력  -->
+	<insert id="insertNoticeComment" parameterType="noticeComment">
+		INSERT
+		INTO NOTICE_COMMENT(comment_num, board_num, comment_content, member_id, postorder, depth)
+		VALUES(notice_comment_seq.nextval, #{boardNum}, #{commentContent}, #{memberId}, #{postOrder}, #{depth})
+	</insert>
+	
+	<!-- 한 게시물에 대한 댓글 목록 취득 -->
+	<select id="listNoticeComment" parameterType="int" resultType="noticeComment">
+		SELECT
+			comment_num,
+			board_num,
+			comment_content,
+			member_id,
+			to_char(comment_date, 'YYYY-MM-DD HH24:MI:SS')commentDate,
+			postorder,
+			depth,
+			del_flg
+		FROM NOTICE_COMMENT
+		WHERE
+			board_num = #{boardNum}
+		ORDER BY
+			postorder
+	</select>
+	
+	<!-- 댓글등록(insert)후, 게시글 재정렬(글 순서정렬 번호) -->
+	<update id="renewPostOrderComment">
+		UPDATE
+			NOTICE_COMMENT
+		SET 
+			postorder = postorder + 1
+	</update>
+	
+	<!-- 한 개 단위의 댓글 정보취득  -->	
+	<select id="oneNoticeCommnetInfo" parameterType="int" resultType="noticeComment">
+		SELECT
+			comment_num,
+			board_num,
+			comment_content,
+			member_id,
+			to_char(comment_date, 'YYYY-MM-DD HH24:MI:SS')commentDate,
+			postorder,
+			depth,
+			del_flg
+		FROM NOTICE_COMMENT
+		WHERE
+			comment_num = #{commentNum}
+	</select>
+	
+	<!-- 댓글(부모)에 대한 re댓글(자식)을 등록하기 위해 자식댓글의 위치선정 -->
+	<update id="setChildComment">
+		UPDATE
+			NOTICE_COMMENT
+		SET 
+			postorder = postorder + 1
+		WHERE
+			postorder <![CDATA[>]]> #{postOrder}
+	</update>
+	
+	<!-- 댓글 삭제  -->
+	
+	<update id="delNoticeComment" parameterType="noticeComment">
+	UPDATE
+	  NOTICE_COMMENT
+	SET
+	  del_flg ='1'
+	 WHERE
+	  comment_num = #{commentNum}
+	</update>
+	
+	
+	
+	<!-- 삭제된 부모댓글에 대한 자식댓글삭제  -->
+	<delete id="delChildComment" parameterType="int">
+		DELETE 
+		FROM NOTICE_COMMENT 
+		WHERE 
+			postorder = #{postOrder}
+	</delete>
+	
+	<!-- 댓글수정 -->
+	<update id="updateNoticeComment" parameterType="noticeComment">
+		UPDATE
+			NOTICE_COMMENT
+		SET 
+			comment_content = #{commentContent}
+		WHERE
+			comment_num = #{commentNum}
+			AND member_id = #{memberId}
+	</update>
+	
+	<!-- 한 개 단위의 댓글 정보취득  -->	
+	<select id="searchPosNoticeCommnet" parameterType="int" resultType="noticeComment">
+		SELECT
+			comment_num,
+			board_num,
+			comment_content,
+			member_id,
+			to_char(comment_date, 'YYYY-MM-DD HH24:MI:SS')commentDate,
+			postorder,
+			depth,
+			del_flg
+		FROM NOTICE_COMMENT
+		WHERE
+			postorder = #{postOrder}
+	</select>
+</mapper>

@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+/* font-family: "Noto Sans KR", sans-serif; 100,300,400,500,700,900 */
+
+#wrap{width:100%}
+#header{}
+#banner{width:100%; height: 300px; background-color: #a0d1ee;}
+#contents{width:100%; height: 500px; background-color: #46a74a;}
+#footer{width:100%; height: 500px; background-color: #6e724a;}
+
+
+/* container */
+/* container의 bacground-color를 on/off시켜가며 영역을 잡는 습관을 들이자 ! */
+.container{width:1200px; margin: 0 auto; position:relative; /*background-color: rgba(0,0,0,0.4);*/}
+
+/*header*/
+.header{overflow:hidden; margin:8px 0;}
+.header .list1{overflow:hidden; float:left;}
+.header .list1 li{float:left;}
+.header .list1 li a{display:block; height: 25px; line-height: 25px ; padding: 0 15px;}
+.header .list1 li:first-child{background: #184A85;border-radius: 3px; box-sizing: border-box; font-weight: 900;}
+.header .list1 li:first-child a{color:#fff;}
+
+.header .list2{float:right; overflow:hidden;}
+.header .list2 li{float:left;}
+.header .list2 li a{display:block; height: 25px; line-height: 25px; padding: 0 15px;}
+
+
+
+
+/* cont2 */
+
+
+/* mediaquery 항상 제일 밑에 있어야한다. */
+/* 1280px 960px 768px 600px 480px 320px*/
+@media(max-width: 1280px) {
+    .container{width:100%;}
+    
+}
+@media(max-width: 1024px){
+
+}
+
+@media(max-width: 960px) {
+
+}
+@media(max-width: 768px) {
+
+}
+@media(max-width: 600px) {
+
+}
+@media(max-width: 480px) {
+   
+}
+@media(max-width: 320px) {
+    
+}

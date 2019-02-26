@@ -1,0 +1,58 @@
+	drop sequence notice_board_seq;
+	drop sequence notice_comment_seq;
+	
+	drop table notice_board;
+	drop table notice_comment;
+	drop table member;
+	
+	--member 테이블 생성
+	create table member(
+	member_id varchar2(30) primary key
+	,password varchar2(30) not null
+	,full_name varchar2(30) not null
+	,nickname varchar2(30) not null
+	,email varchar2(50) not null
+	,phone varchar2(30) 
+	,regdate date default sysdate
+	,authority number default 3
+	,del_flg number(1) default 0);
+	
+	--notice_board 테이블 생성
+	create table notice_board(
+	board_num number primary key 
+	,member_id varchar2(30) not null 
+	,title varchar2(300) not null
+	,content varchar2(4000) not null
+	,regdate date default sysdate
+	,board_count number default 0
+	,postorder number
+	,depth number
+	,del_flg number(1) default 0
+	,constraint notice_board_id_fk foreign key(member_id) 
+	      references member(member_id) on delete cascade );
+	
+	--notice_board시퀀스 생성(boar_dnum 자동생성)
+	create sequence notice_board_seq start with 1;
+	
+	--notice_comment테이블 생성
+	create table notice_comment(
+	comment_num number primary key
+	,board_num number
+	,comment_content varchar2(2000)
+	,member_id varchar2(30)
+	,comment_date date default sysdate
+	,postorder number
+	,depth number
+	,del_flg number(1) default 0
+	,constraint notice_commont_id_fk foreign key(member_id) 
+	      references member(member_id) on delete cascade );
+	      
+	--notice_comment시퀀스 생성(commentnum 자동 생성)      
+	create sequence notice_comment_seq start with 1;
+	
+	--dummy 회원정보 data;
+	Insert into MEMBER(member_Id, password, full_Name, nickname, email, phone,authority)
+	VALUES('isk0930', 'dltjrgns7', '이석훈',  '서쿤즈','isk0930@naver.com','03-1234-5678','0');
+	
+	--커밋하는 spl문
+	commit;     

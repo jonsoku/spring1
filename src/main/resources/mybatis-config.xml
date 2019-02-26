@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 별칭 -->
+	<typeAliases>
+	 <typeAlias type="com.edu.kimschool.board.entity.NoticeBoardEntity" alias="noticeBoard"/>
+	 <typeAlias type="com.edu.kimschool.board.entity.NoticeCommentEntity" alias="noticeComment"/>
+	 <typeAlias type="com.edu.kimschool.member.entity.MemberEntity" alias="member"/>
+	 <typeAlias type="com.edu.kimschool.grade.entity.GradeEntity" alias="grade"/>
+	</typeAliases>
+	<!--xml과 mapper연결  -->
+ 	<mappers>
+		<mapper resource="com/edu/kimschool/board/mapper/noticeMapper.xml"/>
+		<mapper resource="com/edu/kimschool/course/mapper/courseMapper.xml"/>
+		<mapper resource="com/edu/kimschool/grade/mapper/gradeMapper.xml"/>
+		<mapper resource="com/edu/kimschool/mail/mapper/mailMapper.xml"/>
+		<mapper resource="com/edu/kimschool/media/mapper/mediaMapper.xml"/>
+		<mapper resource="com/edu/kimschool/member/mapper/memberMapper.xml"/>
+	</mappers> 
+</configuration>

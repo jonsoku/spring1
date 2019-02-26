@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.kimschool.grade.dao.GradeMapper">
+
+<!-- 성적 입력  -->
+<insert id="gradeInsert" parameterType="grade">
+		INSERT
+		INTO GRADE(member_id, name, itScore, japScore)
+		VALUES(#{memberId}, #{name}, #{itScore}, #{japScore})
+	</insert>
+	
+<select id="gradeInfoList" resultType="grade">
+		SELECT 
+			member_id,
+			name,
+			itScore,
+			japScore
+		FROM
+			GRADE
+			
+</select>
+	
+<update id="gradeUpdate" parameterType="grade">
+		UPDATE 
+			GRADE
+		SET
+			itScore = #{itScore}	
+			japScore = #{japScore}
+		WHERE
+			member_id = #{memberId}
+</update>
+
+<delete id="gradeDelete" parameterType="grade">
+		DELETE
+		FROM 
+			GRADE
+		WHERE
+			member_id = #{memberId}
+</delete>	
+
+</mapper>

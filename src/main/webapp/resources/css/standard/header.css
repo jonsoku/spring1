@@ -1,0 +1,12 @@
+#header{background-color: #66666659;position: fixed; width:100%; z-index:9}
+
+.header{overflow: hidden; position: relative; height:100px; }
+.header h1{float:left; width: 20%;}
+.top-menu{position: absolute; right:0; top:0; line-height: 40px;}
+.top-menu li{float: left;}
+.top-menu li a{display: block; padding: 0 11px; color: rgb(255, 255, 255);}
+.top-menu li:last-child a{padding: 0 0 0 11px;}
+.gnb{position: absolute; right:0; top:40px; line-height: 60px;}
+.gnb li{float: left; }
+.gnb li a{display:block; padding: 0 31px; font-size: 20px; font-family: 'HanaB', serif; color: white;}
+.gnb li:last-child a{padding: 0 0 0 31px;}
